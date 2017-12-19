@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.android.incred.musicplayer.activity.MainActivity">
+
+    <FrameLayout
+        android:id="@+id/flContainer"
+        android:animateLayoutChanges="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/rlPlayerHolder"/>
+
+    <RelativeLayout
+        android:id="@+id/rlPlayerHolder"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:visibility="gone"
+        android:background="@color/blackLight">
+
+        <ImageView
+            android:id="@+id/ivPlayPauseButton"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_margin="@dimen/margin_8dp"/>
+
+        <TextView
+            android:id="@+id/tvSongName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_16dp"
+            android:layout_marginTop="@dimen/margin_8dp"
+            android:layout_toRightOf="@+id/ivPlayPauseButton"
+            android:alpha=".9"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Widget.PopupMenu.Header"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/text_size_16sp"/>
+
+        <TextView
+            android:id="@+id/tvSongSinger"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvSongName"
+            android:layout_marginLeft="@dimen/margin_16dp"
+            android:layout_toRightOf="@+id/ivPlayPauseButton"
+            android:alpha=".8"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Widget.PopupMenu.Header"
+            android:textColor="@color/white"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

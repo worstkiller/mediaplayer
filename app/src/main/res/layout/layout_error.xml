@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:id="@+id/llError"
+    android:visibility="gone"
+    android:orientation="vertical">
+
+    <TextView
+        android:gravity="center"
+        android:textSize="20sp"
+        android:text="@string/error_msg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/tvErrorLoading"
+        style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+        android:text="@string/button_try_again"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

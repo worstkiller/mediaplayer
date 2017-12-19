@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cvMusic"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/margin_4dp"
+    android:orientation="vertical"
+    app:cardElevation="@dimen/margin_4dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/ivCoverImage"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_height"
+            android:scaleType="centerCrop"
+            android:src="@color/colorAccent"/>
+
+        <TextView
+            android:id="@+id/tvSongName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ivCoverImage"
+            android:maxLines="1"
+            android:paddingLeft="@dimen/margin_8dp"
+            android:paddingRight="@dimen/margin_16dp"
+            android:paddingTop="@dimen/margin_8dp"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Widget.PopupMenu.Header"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/text_size_16sp"/>
+
+        <TextView
+            android:id="@+id/tvSongAuthor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvSongName"
+            android:maxEms="11"
+            android:maxLines="1"
+            android:paddingBottom="@dimen/margin_8dp"
+            android:paddingLeft="@dimen/margin_8dp"
+            android:paddingRight="@dimen/margin_16dp"/>
+
+        <ImageView
+            android:id="@+id/ivMusicMenu"
+            android:layout_width="@dimen/menu_height"
+            android:layout_height="@dimen/menu_height"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/ivCoverImage"
+            android:layout_marginTop="@dimen/margin_8dp"
+            android:background="@drawable/ic_action_menu"/>
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>
