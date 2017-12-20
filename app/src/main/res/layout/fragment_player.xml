@@ -73,7 +73,7 @@
         android:layout_marginBottom="?actionBarSize"
         android:layout_marginLeft="@dimen/margin_16dp"
         android:layout_marginRight="@dimen/margin_16dp"
-        android:background="@drawable/ic_action_pause"/>
+        android:background="@drawable/ic_action_play"/>
 
     <ImageView
         android:id="@+id/ivPlayPreviousButton"

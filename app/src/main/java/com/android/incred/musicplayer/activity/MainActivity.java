@@ -63,6 +63,10 @@ public class MainActivity extends AppCompatActivity {
             public void onPrepared(final MediaPlayer mediaPlayer) {
                 //media player prepared
                 togglePlayPausePlayer();
+                PlayerFragment playerFragment = getPlayerFragment();
+                if (playerFragment != null) {
+                    playerFragment.onPreparedCalled();
+                }
             }
         });
 
@@ -71,40 +75,38 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCompletion(final MediaPlayer mediaPlayer) {
                 //handle the media play completion
-                setPlayAndPause(false);
+                handleOnCompletionLogic();
+                PlayerFragment playerFragment = getPlayerFragment();
+                if (playerFragment != null) {
+                    playerFragment.handleOnCompletionLogic();
+                }
+            }
+        });
+    }
+
+    public void handleOnCompletionLogic() {
+        //handle the playback completion logic
+        setPlayAndPause(false);
+        if (mMusicModelList.size() > 0) {
+            for (MusicModel musicModel : mMusicModelList) {
+                if (mTvSongName.getText().toString().equals(musicModel.getSong())
+                        &&
+                        mTvSongSinger.getText().toString().equals(musicModel.getArtists())) {
+                    //a song is matched with playing one, remove the current playing one
+                    mMusicModelList.remove(musicModel);
+                }
+                //check if the size is still larger than 0 if so play the song from top else hide the player
                 if (mMusicModelList.size() > 0) {
-                    for (MusicModel musicModel : mMusicModelList) {
-                        if (mTvSongName.getText().toString().equals(musicModel.getSong())
-                                &&
-                                mTvSongSinger.getText().toString().equals(musicModel.getArtists())) {
-                            //a song is matched with playing one, remove the current playing one
-                            mMusicModelList.remove(musicModel);
-                        }
-                        //check if the size is still larger than 0 if so play the song from top else hide the player
-                        if (mMusicModelList.size() > 0) {
-                            playMusic(mMusicModelList.get(0));
-                        } else {
-                            mMediaPlayer.reset();
-                            showHideBottomPlayer(false);
-                        }
-                    }
+                    playMusic(mMusicModelList.get(0));
                 } else {
                     mMediaPlayer.reset();
                     showHideBottomPlayer(false);
                 }
             }
-        });
-
-        //update the seekbar completion on player fragment
-        mMediaPlayer.setOnSeekCompleteListener(new MediaPlayer.OnSeekCompleteListener() {
-            @Override
-            public void onSeekComplete(final MediaPlayer mediaPlayer) {
-                if (isPlayerFragment()){
-                    //update the player fragment ui with latest seek position
-                }
-            }
-        });
-
+        } else {
+            mMediaPlayer.reset();
+            showHideBottomPlayer(false);
+        }
     }
 
     public void replaceFragment(Fragment fragment, final boolean backStack) {
@@ -143,19 +145,19 @@ public class MainActivity extends AppCompatActivity {
             mMediaPlayer.reset();
             mMediaPlayer.setDataSource(musicModel.getUrl());
             mMediaPlayer.prepareAsync();
-            if (!isPlayerFragment()){
+            if (!isPlayerFragment()) {
                 setPlayAndPause(true);
                 showHideBottomPlayer(true);
                 mTvSongName.setText(musicModel.getSong());
                 mTvSongSinger.setText(musicModel.getArtists());
             }
-        } catch (IOException exp) {
+        } catch (IOException | IllegalStateException exp) {
             exp.printStackTrace();
             showMessage(getString(R.string.error_unable_play));
         }
     }
 
-    private void showMessage(final String msg) {
+    public void showMessage(final String msg) {
         //here show the message if something went wrong
         Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
     }
@@ -234,32 +236,57 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public long getDuration(){
+    private PlayerFragment getPlayerFragment() {
+        //returns a player fragment
+        Fragment fragment = getFragmentManager().findFragmentByTag(PlayerFragment.class.getCanonicalName());
+        if (fragment instanceof PlayerFragment) {
+            return (PlayerFragment) fragment;
+        } else {
+            return null;
+        }
+    }
+
+    public int getDuration() {
         //this returns total time in milliseconds
-        if (mMediaPlayer.isPlaying()){
+        if (mMediaPlayer.isPlaying()) {
             return mMediaPlayer.getDuration();
-        }else{
+        } else {
             return 0;
         }
     }
 
-    public boolean isPlaying(){
+    public boolean isPlaying() {
         //this returns if media player is playing
         return mMediaPlayer.isPlaying();
     }
 
-    public void setStop(){
-        //this will stop the media player from the player fragment
+    public void stop() {
+        //stop the media player
         mMediaPlayer.stop();
     }
 
-    public void setReset(){
-        //this will reset the media player from the player fragment
+    public void reset() {
+        //reset the media player
         mMediaPlayer.reset();
     }
 
-    public void setPause(){
-        //this will reset the media player from the player fragment
-        mMediaPlayer.reset();
+    public void pause() {
+        //pause the media player
+        mMediaPlayer.pause();
+    }
+
+    public void start() {
+        //start the media player
+        mMediaPlayer.start();
+    }
+
+    public void release() {
+        //release media player
+        mMediaPlayer.release();
+    }
+
+    public int getCurrentPosition() {
+        //return current position
+        return mMediaPlayer.getCurrentPosition();
     }
 }

@@ -8,4 +8,5 @@
     <string name="button_try_again">Try Again</string>
     <string name="error_unable_play">Unable to play music, please check network</string>
     <string name="time_start">00:00</string>
+    <string name="playing_error">Not able to play the song</string>
 </resources>
