@@ -5,6 +5,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private MediaPlayer mMediaPlayer;
     private List<MusicModel> mMusicModelList = new ArrayList<>();
     private List<MusicModel> mAllSongs = new ArrayList<>();
+    private MusicModel mMusicModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +121,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void attachPlayer() {
+        if (mMediaPlayer != null && mMediaPlayer.isPlaying() && mMusicModel != null) {
+            //that means we have some song playing from player fragment
+            mTvSongName.setText(mMusicModel.getSong());
+            mTvSongSinger.setText(mMusicModel.getArtists());
+            showHideBottomPlayer(true);
+        }
+        Log.d("TAG ", " onAttachFragment called from activity");
+    }
+
+
     @OnClick(R.id.ivPlayPauseButton)
     public void onViewClicked() {
         //handle the play pause logic
@@ -151,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
                 mTvSongName.setText(musicModel.getSong());
                 mTvSongSinger.setText(musicModel.getArtists());
             }
+            mMusicModel = musicModel;
         } catch (IOException | IllegalStateException exp) {
             exp.printStackTrace();
             showMessage(getString(R.string.error_unable_play));
@@ -162,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
     }
 
-    private void showHideBottomPlayer(boolean isTrue) {
+    public void showHideBottomPlayer(boolean isTrue) {
         //this hides and shows the layout with animation
         if (isTrue) {
             mRlPlayerHolder.setAnimation(Util.showHideAnim(this, true));
@@ -288,5 +302,13 @@ public class MainActivity extends AppCompatActivity {
     public int getCurrentPosition() {
         //return current position
         return mMediaPlayer.getCurrentPosition();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (!isPlayerFragment()){
+            attachPlayer();
+        }
     }
 }

@@ -86,9 +86,12 @@ public class PlayerFragment extends Fragment {
 
     private void initPlayerView(final int musicPosition) {
         //here init the player view and position and data related
-        mMusicMetaData = getMusicMetaData(musicPosition);
-        setUIData(mMusicMetaData);
-        setPlayAndPause(true);
+        if (isAdded()) {
+            mMusicMetaData = getMusicMetaData(musicPosition);
+            setUIData(mMusicMetaData);
+            setPlayAndPause(true);
+            mSbTimer.setOnTouchListener(null);
+        }
     }
 
     private void setUIData(MusicMetaData musicMetaData) {
@@ -128,32 +131,48 @@ public class PlayerFragment extends Fragment {
                 handlePlayAndPause();
                 break;
             case R.id.ivPlayPreviousButton:
-                initPlayerView(mMusicMetaData.getPreviousPosition());
-                if (mMusicMetaData.getMusicModel() != null) {
-                    mMediaPlayer.playMusic(mMusicMetaData.getMusicModel());
-                } else {
-                    mMediaPlayer.showMessage(getString(R.string.playing_error));
-                }
+                handlePreviousSong();
                 break;
             case R.id.ivPlayNextButton:
-                initPlayerView(mMusicMetaData.getNextPosition());
-                if (mMusicMetaData.getMusicModel() != null) {
-                    mMediaPlayer.playMusic(mMusicMetaData.getMusicModel());
-                } else {
-                    mMediaPlayer.showMessage(getString(R.string.playing_error));
-                }
+                handleNextSong();
                 break;
+        }
+    }
+
+    private void handlePreviousSong() {
+        //here handle the previous song
+        if (isAdded()) {
+            initPlayerView(mMusicMetaData.getPreviousPosition());
+            if (mMusicMetaData.getMusicModel() != null) {
+                mMediaPlayer.playMusic(mMusicMetaData.getMusicModel());
+            } else {
+                mMediaPlayer.showMessage(getString(R.string.playing_error));
+            }
+        }
+    }
+
+    private void handleNextSong() {
+        //here handle the next song
+        if (isAdded()) {
+            initPlayerView(mMusicMetaData.getNextPosition());
+            if (mMusicMetaData.getMusicModel() != null) {
+                mMediaPlayer.playMusic(mMusicMetaData.getMusicModel());
+            } else {
+                mMediaPlayer.showMessage(getString(R.string.playing_error));
+            }
         }
     }
 
     private void handlePlayAndPause() {
         //this handles the play and pause logic
-        if (mMediaPlayer.isPlaying()) {
-            mMediaPlayer.pause();
-            setPlayAndPause(false);
-        } else {
-            mMediaPlayer.start();
-            setPlayAndPause(true);
+        if (isAdded()) {
+            if (mMediaPlayer.isPlaying()) {
+                mMediaPlayer.pause();
+                setPlayAndPause(false);
+            } else {
+                mMediaPlayer.start();
+                setPlayAndPause(true);
+            }
         }
     }
 
@@ -175,25 +194,31 @@ public class PlayerFragment extends Fragment {
     public void onActivityCreated(@Nullable final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         //here start the first started music
-        mMediaPlayer = ((MainActivity) getActivity());
-        initPlayerView(musicPosition);
-        mMediaPlayer.playMusic(mMusicMetaData.getMusicModel());
+        if (isAdded()) {
+            mMediaPlayer = ((MainActivity) getActivity());
+            initPlayerView(musicPosition);
+            mMediaPlayer.playMusic(mMusicMetaData.getMusicModel());
+        }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mMediaPlayer != null) {
-            if (mMediaPlayer.isPlaying()) {
-                mMediaPlayer.stop();
+        if (isAdded()) {
+            if (mMediaPlayer != null) {
+                if (mMediaPlayer.isPlaying()) {
+                    mMediaPlayer.stop();
+                }
+                mMediaPlayer.release();
+                mMediaPlayer = null;
             }
-            mMediaPlayer.release();
-            mMediaPlayer = null;
         }
     }
 
     public void handleOnCompletionLogic() {
         //handle the media play completion
+        setPlayAndPause(false);
+        handleNextSong();
 
     }
 
@@ -226,7 +251,9 @@ public class PlayerFragment extends Fragment {
             @Override
             public void run() {
                 //here run the updation task
-                seekUpdate();
+                if (isAdded()) {
+                    seekUpdate();
+                }
             }
         };
     }
@@ -238,4 +265,5 @@ public class PlayerFragment extends Fragment {
         mSbTimer.setProgress(mMediaPlayer.getCurrentPosition());
         seekHandler.postDelayed(getRunnable(), 1000);
     }
+
 }

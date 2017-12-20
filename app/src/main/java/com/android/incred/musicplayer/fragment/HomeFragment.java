@@ -142,6 +142,7 @@ public class HomeFragment extends Fragment {
     private void openPlayerFragment(int position) {
         //this will open the current music song in next fragment &
         //adding all songs to activity for accessible to player fragment
+        ((MainActivity) getActivity()).showHideBottomPlayer(false);
         ((MainActivity) getActivity()).addAllSongs(mMusicModelList);
         ((MainActivity) getActivity()).replaceFragment(PlayerFragment.getInstance(position), true);
     }
