@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MusicPLayer</string>
+    <string name="app_name">Ola Play</string>
     <string name="sample_text_music_goes_here">Song or music name goes here</string>
     <string name="sample_text_author_name">Author name goes here</string>
     <string name="error_msg">Oops something went wrong</string>
